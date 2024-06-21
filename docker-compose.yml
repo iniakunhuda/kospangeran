@@ -1,0 +1,78 @@
+version: "3.7"
+
+networks:
+    kosan_network:
+
+services:
+    app:
+        build:
+            args:
+                USER: rudi
+                UID: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: kosan_image
+        container_name: kosan_container
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+            - "./storage/app:/var/www/public/storage" # symlink
+        networks:
+            - kosan_network
+
+    nginx:
+        image: nginx:latest
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker-compose/nginx:/etc/nginx/conf.d/
+        depends_on:
+            - php
+        networks:
+            - kosan_network
+
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/var/www
+        environment:
+            - DB_CONNECTION=mongodb
+            - DB_HOST=mongodb
+            - DB_PORT=27018
+            - DB_DATABASE=sikosan
+            - DB_USERNAME=${MONGODB_USERNAME}
+            - DB_PASSWORD=${MONGODB_PASSWORD}
+        depends_on:
+            - mongodb
+        networks:
+            - kosan_network
+
+    mongodb:
+        image: mongo:latest
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=kosandb
+            - MONGO_INITDB_ROOT_PASSWORD=banana123
+        ports:
+            - "27018:27017" # TODO: change to 27017 ketika di production
+        volumes:
+            - mongodb-data:/data/db
+        networks:
+            - kosan_network
+
+    node:
+        image: node:20
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        networks:
+            - kosan_network
+        depends_on:
+            - app
+        command: sh -c "npm install && npm run dev"
+
+volumes:
+    mongodb-data:
