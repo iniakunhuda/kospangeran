@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RekeningResource;
 use App\Models\Rekening;
+use App\Models\RiwayatBayar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -85,7 +86,10 @@ class RekeningController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: Gabisa dihapus kalau ada rekening
+        $riwayat_bayar = RiwayatBayar::where('rekening_id', $id)->first();
+        if (isset($riwayat_bayar)) {
+            return response()->json('Rekening tidak dapat dihapus', 500);
+        }
 
         $rekening = Rekening::where('_id', $id)->first();
         if (!isset($rekening)) {

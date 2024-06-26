@@ -173,6 +173,7 @@
                 </div>
             </div>
 
+
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card">
@@ -186,6 +187,7 @@
                                 <table id="tbl_list" class="dataTable table" cellspacing="0" width="100%">
                                     <thead class="thead-primary">
                                         <tr>
+                                            <th>No</th>
                                             <th>Penyewa</th>
                                             <th>Area</th>
                                             <th>Kamar</th>
@@ -197,8 +199,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($dataTable as $item)
+                                        @foreach ($dataTable as $key => $item)
                                             <tr>
+                                                <td class="text-center">{{ $key+1 }}</td>
                                                 <td>{{ $item->penyewa->nama }}</td>
                                                 <td>
                                                     {{ $item->area->judul }}

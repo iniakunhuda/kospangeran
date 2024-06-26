@@ -17,6 +17,60 @@ use Illuminate\Database\Eloquent\Collection;
 class TagihanService
 {
 
+    public static function createTagihanAutomatic($month = 1, $year = 2024, $tipe = 'Bulanan')
+    {
+        $tipe = ucfirst($tipe);
+        $sewa_active = Sewa::active()->where('durasi', $tipe)->get();
+        if (count($sewa_active) < 1) {
+            return;
+        }
+
+        foreach ($sewa_active as $sewa) {
+            $tanggal_bayar = Carbon::parse($sewa->tanggal_bayar)->format('d');
+
+            if ($tipe == 'Bulanan') {
+                $range_date = [
+                    'start' => Carbon::createFromDate($year, $month, 1),
+                    'end' => Carbon::createFromDate($year, $month, 1)->endOfMonth()
+                ];
+            } else {
+                $range_date = [
+                    'start' => Carbon::createFromDate($year, $month, 1),
+                    'end' => Carbon::createFromDate($year, 12, 31)->endOfMonth()
+                ];
+            }
+
+            $tagihan = Tagihan::where('penyewa_id', $sewa->penyewa_id)
+                ->where('durasi', ucfirst($tipe))
+                ->where('kamar_id', $sewa->kamar_id)
+                ->where('area_id', $sewa->area_id)
+                ->whereBetween('tanggal_tagihan_dibuat', [$range_date['start'], $range_date['end']])
+                ->first();
+
+            if ($tagihan) {
+                continue;
+            }
+
+            try {
+                $tagihan = Tagihan::create([
+                    'area_id' => $sewa->area_id,
+                    'kamar_id' => $sewa->kamar_id,
+                    'penyewa_id' => $sewa->penyewa_id,
+                    'tanggal_tagihan_dibuat' => Carbon::createFromDate($year, $month, $tanggal_bayar),
+                    'total_tagihan' => $sewa->total_bayar,
+                    'sisa_tagihan' => $sewa->total_bayar,
+                    'durasi' => $sewa->durasi,
+                    'status' => Tagihan::STATUS_BAYAR_BELUM_BAYAR
+                ]);
+            } catch (Exception $e) {
+                throw new Exception('Gagal membuat tagihan. Error: ' . $e->getMessage());
+            }
+        }
+
+        return true;
+    }
+
+
     public static function getPenyewaBelumBayar()
     {
         $result = self::groupedInvoiceByUser();
@@ -190,6 +244,5 @@ class TagihanService
         }
 
         return $response;
-        // return id tagihan, total pembayaran, dan status
     }
 }

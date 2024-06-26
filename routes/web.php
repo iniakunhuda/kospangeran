@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\KamarController;
 use App\Http\Controllers\Admin\MasterRekeningController;
 use App\Http\Controllers\Admin\TagihanController;
 use App\Http\Controllers\Admin\PenyewaController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RiwayatKamarController;
 use App\Http\Controllers\Admin\SewaController;
 use App\Http\Controllers\Admin\TipeKamarController;
@@ -37,6 +38,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('tipe_kamar', TipeKamarController::class);
     Route::resource('riwayat_kamar', RiwayatKamarController::class);
     Route::resource('penyewa', PenyewaController::class);
+
+    Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('index');
+        Route::put('edit', [ProfileController::class, 'update'])->name('update');
+    });
 
     Route::get('kamar/{id}/riwayat_penyewa', [KamarController::class, 'riwayatPenyewaIndex'])->name('kamar.riwayat_penyewa');
     Route::resource('kamar', KamarController::class);
@@ -87,6 +93,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     });
 
     Route::group(['prefix' => 'tagihan', 'as' => 'tagihan.'], function () {
+
+        Route::post('generate_auto', [
+            TagihanController::class, 'generateTagihanCreate'
+        ])->name('generate.run');
+        Route::get('generate_index', [
+            TagihanController::class, 'generateTagihanIndex'
+        ])->name('generate.index');
+
         Route::get('belum_bayar', [
             TagihanController::class, 'belumBayarIndex'
         ])->name('belumbayar.index');

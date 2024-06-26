@@ -23,7 +23,7 @@
                                 {{ $penyewa->nomor_wa }}
                             </a>
                             <h4 class="mb-0">{{ $penyewa->nama }}</h4>
-                            <ul class="mt-3">
+                            <ul class="mt-3 color-black">
                                 @php
                                     $sewa_harga = $penyewa->sewa->total_bayar ?? 0;
                                     $sewa_durasi = $penyewa->sewa->durasi_format ?? 'Bulan';
@@ -36,7 +36,9 @@
                             </ul>
                         </div>
                         <div class="card-body">
-                            <p class="mb-0 mt-2 opacity-50">
+                            <p class="mb-0 mt-2 opacity-50 color-black">
+                                Deskripsi :
+                                <br>
                                 {{ $penyewa->deskripsi }}
                             </p>
                             <div class="row">
@@ -101,7 +103,7 @@
                         <div class="card-header">
                             <h4>Kamar saat ini</h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body color-black">
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label pt-0">Area</label>
                                 <div class="col-sm-10">

@@ -24,7 +24,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="dataTable table-responsive">
+                                <table class="dataTable table-responsive color-black">
                                 <tbody>
                                     <tr>
                                         <th width="20%">Nama Pembayaran</th>

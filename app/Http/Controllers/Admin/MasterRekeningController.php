@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rekening;
+use App\Models\RiwayatBayar;
 use Illuminate\Http\Request;
 
 class MasterRekeningController extends Controller
@@ -129,12 +130,16 @@ class MasterRekeningController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: Gabisa dihapus kalau ada transaksi
-
         $rekening = Rekening::where('_id', $id)->first();
         if (!isset($rekening)) {
             return abort(404, 'Rekening Tidak Ditemukan');
         }
+
+        $riwayat_bayar = RiwayatBayar::where('rekening_id', $rekening->_id)->first();
+        if ($riwayat_bayar) {
+            return $this->getRedirectRoute()->withErrors(['error' => 'Data gagal dihapus, karena sudah ada transaksi']);
+        }
+
         $result = $rekening->delete();
         if ($result) {
             return $this->getRedirectRoute()->with('success', 'Data berhasil dihapus');

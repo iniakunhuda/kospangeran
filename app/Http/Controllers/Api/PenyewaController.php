@@ -8,6 +8,7 @@ use App\Http\Resources\PenyewaInvoiceResource;
 use App\Http\Resources\PenyewaResource;
 use App\Models\Kamar;
 use App\Models\Penyewa;
+use App\Models\RiwayatBayar;
 use App\Models\Sewa;
 use App\Models\Tagihan;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -141,7 +142,12 @@ class PenyewaController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: Gabisa dihapus kalau lg sewa
+        $riwayat_sewa = Sewa::where('penyewa_id', $id)->first();
+        $riwayat_bayar = RiwayatBayar::where('penyewa_id', $id)->first();
+        if ($riwayat_sewa || $riwayat_bayar) {
+            return response()->json(['message' => 'Tidak bisa menghapus penyewa karena sudah pernah menyewa'], 400);
+        }
+
 
         $penyewa = Penyewa::find($id);
         if (!$penyewa) {
@@ -158,5 +164,4 @@ class PenyewaController extends Controller
             return response()->json(null, 500);
         }
     }
-
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TipeKamarResource;
+use App\Models\Kamar;
 use App\Models\TipeKamar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -96,7 +97,10 @@ class TipeKamarController extends Controller
      */
     public function destroy(String $id)
     {
-        // TODO: Gabisa dihapus kalau ada kamar
+        $kamar = Kamar::where('tipe_kamar_id', $id)->first();
+        if ($kamar) {
+            return response()->json('Tipe Kamar tidak dapat dihapus', 500);
+        }
 
         $tipeKamar = TipeKamar::find($id);
         if (!$tipeKamar) {

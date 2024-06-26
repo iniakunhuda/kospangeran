@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{asset('admin')}}/vendor/select2/css/select2.min.css">
+    <link rel="stylesheet" href="{{ asset('admin') }}/vendor/select2/css/select2.min.css">
 @endpush
 
 
 @push('scripts')
-    <script src="{{asset('admin')}}/vendor/select2/js/select2.full.min.js"></script>
+    <script src="{{ asset('admin') }}/vendor/select2/js/select2.full.min.js"></script>
     <script>
         $('.single-select').select2({})
     </script>
@@ -31,7 +31,16 @@
                 </div>
             </div>
 
-            <div class="alert alert-dark">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <a href="{{ route('tagihan.generate.index') }}" class="btn btn-primary">
+                        <i class="fa fa-plus mr-3"></i> Buat Tagihan Otomatis
+                    </a>
+                    <br><br>
+                </div>
+            </div>
+
+            {{-- <div class="alert alert-dark">
                 <i class="fa fa-info-circle mr-3"></i>
                 <strong>Informasi</strong><br><br>
                 <ul>
@@ -39,19 +48,21 @@
                     <li>Tiap tanggal 1 pada bulan berjalan</li>
                     <li>Penyewa sewa kamar baru / pindah kamar</li>
                 </ul>
-            </div>
+            </div> --}}
 
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div id="accordion">
                         <div class="card">
-                            <div class="card-header" id="headingOne"  data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
                                 <h5 class="mb-3">
                                     Filter
                                 </h5>
                             </div>
 
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordion">
                                 <div class="card-body">
                                     <form action="" method="GET">
                                         <div class="form-group row">
@@ -59,8 +70,10 @@
                                             <div class="col-sm-10">
                                                 <select name="area_id" class="form-control single-select">
                                                     <option value="">Semua Area</option>
-                                                    @foreach($filter_areas as $area)
-                                                        <option value="{{ $area->id }}" {{ request()->area_id == $area->id ? 'selected' : '' }}>{{ $area->judul }}</option>
+                                                    @foreach ($filter_areas as $area)
+                                                        <option value="{{ $area->id }}"
+                                                            {{ request()->area_id == $area->id ? 'selected' : '' }}>
+                                                            {{ $area->judul }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -70,8 +83,10 @@
                                             <div class="col-sm-10">
                                                 <select name="kamar_id" class="form-control single-select">
                                                     <option value="">Semua Kamar</option>
-                                                    @foreach($filter_kamars as $kamar)
-                                                        <option value="{{ $kamar->id }}" {{ request()->kamar_id == $kamar->id ? 'selected' : '' }}>{{ $kamar->option_label }}</option>
+                                                    @foreach ($filter_kamars as $kamar)
+                                                        <option value="{{ $kamar->id }}"
+                                                            {{ request()->kamar_id == $kamar->id ? 'selected' : '' }}>
+                                                            {{ $kamar->option_label }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -81,8 +96,10 @@
                                             <div class="col-sm-10">
                                                 <select name="penyewa_id" class="form-control single-select">
                                                     <option value="">Semua Penyewa</option>
-                                                    @foreach($filter_penyewas as $penyewa)
-                                                        <option value="{{ $penyewa->id }}" {{ request()->penyewa_id == $penyewa->id ? 'selected' : '' }}>{{ $penyewa->nama }} ({{ $penyewa->nomor_wa }})</option>
+                                                    @foreach ($filter_penyewas as $penyewa)
+                                                        <option value="{{ $penyewa->id }}"
+                                                            {{ request()->penyewa_id == $penyewa->id ? 'selected' : '' }}>
+                                                            {{ $penyewa->nama }} ({{ $penyewa->nomor_wa }})</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -113,42 +130,55 @@
                             @include('layouts.components.alert')
 
                             <div class="table-responsive">
-                                @foreach($dataTable as $data)
+                                @foreach ($dataTable as $data)
                                     <div class="mb-4">
                                         <div class="media mb-3">
                                             <div class="mr-3">
-                                                    <img style="height:100px" src="{{ $data['penyewa']['foto_penyewa_url'] }}" class="img-fluid rounded">
+                                                <img style="height:100px" src="{{ $data['penyewa']['foto_penyewa_url'] }}"
+                                                    class="img-fluid rounded">
                                             </div>
                                             <div class="media-body">
-                                                <span>{{ $data['area']['judul'] }} - {{ $data['kamar']['nama'] }}</span><br>
+                                                <span>{{ $data['area']['judul'] }} -
+                                                    {{ $data['kamar']['nama'] }}</span><br>
                                                 <h4 class="text-dark">
-                                                    {{ $data['penyewa']['nama'] }}
+                                                    <a href="{{ route('penyewa.show', $data['penyewa']['_id']) }}"
+                                                        class="text-dark">
+                                                        {{ $data['penyewa']['nama'] }}
+                                                    </a>
                                                 </h4>
                                                 <h4 class="text-danger">
                                                     @currency($data['total_tagihan'])
                                                 </h4><br>
                                             </div>
                                         </div>
-                                        <ul>
+                                        <table class="table">
+
                                             @foreach ($data['tagihan'] as $tagihan)
-                                                <li>
-                                                    <span>{{ $tagihan['tanggal_tagihan_dibuat_formatted'] }}</span>
-                                                    <span class="text-danger ml-3">
-                                                        @currency($tagihan['sisa_tagihan'])
-                                                    </span>
-                                                    <div class="float-right">
-                                                        <form action="{{ route('tagihan.belumbayar.destroy', $tagihan['_id']) }}" method="POST" class="d-inline">
+                                                <tr>
+                                                    <td style="width: 40%">
+                                                        <span class="text-dark">
+                                                            {{ $tagihan['tanggal_tagihan_dibuat_formatted'] }}
+                                                        </span>
+                                                    </td>
+                                                    <td style="width: 80%">
+                                                        <span class="text-dark ml-3">
+                                                            @currency($tagihan['sisa_tagihan'])
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <form
+                                                            action="{{ route('tagihan.belumbayar.destroy', $tagihan['_id']) }}"
+                                                            method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-danger">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </form>
-                                                    </div>
-                                                </li>
-                                                <hr class="border-dark">
+                                                    </td>
+                                                </tr>
                                             @endforeach
-                                        </ul>
+                                        </table>
                                     </div>
                                 @endforeach
                             </div>
@@ -175,8 +205,7 @@
 @endsection
 
 @push('scripts')
-<script type="text/javascript">
-$(document).ready(function () {
- });
-</script>
+    <script type="text/javascript">
+        $(document).ready(function() {});
+    </script>
 @endpush

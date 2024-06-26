@@ -17,6 +17,32 @@ use Illuminate\Http\Request;
 
 class TagihanController extends Controller
 {
+
+    public function generateTagihanIndex()
+    {
+        return view('admin.tagihan.generate.index');
+    }
+
+    public function generateTagihanCreate(Request $request)
+    {
+        $month = $request->month ?? Carbon::now()->month;
+        $year = $request->year ?? Carbon::now()->year;
+        $type_pay = $request->tipe_bayar ?? 'Bulanan';
+
+        try {
+            $result = TagihanService::createTagihanAutomatic($month, $year, $type_pay);
+
+            if ($result) {
+                return redirect()->route('tagihan.belumbayar.index')->with('success', 'Tagihan berhasil dibuat');
+            } else {
+                return redirect()->route('tagihan.belumbayar.index')->withErrors(['error' => 'Tagihan gagal dibuat']);
+            }
+        } catch (\Exception $e) {
+            return redirect()->route('tagihan.belumbayar.index')->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+
     public function belumBayarIndex(Request $request)
     {
         $status = $request->status ?? '0';

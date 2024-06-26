@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaDetailResource;
 use App\Http\Resources\AreaResource;
 use App\Models\AreaKos;
+use App\Models\TipeKamar;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -89,7 +90,10 @@ class AreaController extends Controller
      */
     public function destroy(AreaKos $area)
     {
-        // TODO: Gabisa dihapus kalau ada tipe kamar
+        $tipe_kamar = TipeKamar::where('area_id', $area->_id)->get();
+        if (count($tipe_kamar) > 0) {
+            return response()->json(['message' => 'Area tidak bisa dihapus karena masih memiliki tipe kamar'], 400);
+        }
 
         $result = $area->delete();
         if ($result) {

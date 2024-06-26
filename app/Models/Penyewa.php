@@ -43,10 +43,7 @@ class Penyewa extends Model
 
     public function getFotoPenyewaUrlAttribute()
     {
-        if (!empty($this->foto_penyewa)) {
-            return url(Storage::url($this->foto_penyewa));
-        }
-        return "";
+        return url(Storage::url($this->foto_penyewa));
     }
 
     public function getIsAllowDeleteAttribute()

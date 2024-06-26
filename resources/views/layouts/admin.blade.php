@@ -7,13 +7,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title', 'Kos Pangeran')</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('admin')}}/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin') }}/images/favicon.png">
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 
-    <link href="{{asset('admin')}}/css/style.css" rel="stylesheet">
+    <link href="{{ asset('admin') }}/css/style.css" rel="stylesheet">
     @stack('styles')
 </head>
 
@@ -43,7 +43,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="{{route('home')}}" class="brand-logo">
+            <a href="{{ route('home') }}" class="brand-logo">
                 <img class="brand-title" style="max-width: 100px" src="{{ asset('icon/logo_kos.png') }}" alt="">
             </a>
 
@@ -83,11 +83,12 @@
                                     <i class="mdi mdi-account"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a href="{{asset('admin')}}/app-profile.html" class="dropdown-item">
+                                    <a href="{{ route('profile.index') }}" class="dropdown-item">
                                         <i class="icon-user"></i>
                                         <span class="ml-2">Profile </span>
                                     </a>
-                                    <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
+                                    <a href="{{ route('logout') }}" class="dropdown-item"
+                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <i class="icon-key"></i>
                                         <span class="ml-2">Logout</span>
@@ -115,37 +116,60 @@
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
                     <li class="nav-label first">Main Menu</li>
-                    <li><a href="{{ route('home') }}" aria-expanded="false"><i class="icon icon-home-minimal"></i><span class="nav-text">Dashboard</span></a></li>
+                    <li><a href="{{ route('home') }}" aria-expanded="false"><i class="icon icon-home-minimal"></i><span
+                                class="nav-text">Dashboard</span></a></li>
+                    <li><a href="{{ route('area.index') }}" aria-expanded="false"><i
+                                class="icon icon-app-store"></i><span class="nav-text">Area Bangunan</span></a></li>
 
-                    <li class="nav-label">Manajemen Kos</li>
-                    <li><a href="{{ route('area.index') }}" aria-expanded="false"><i class="icon icon-app-store"></i><span class="nav-text">Area Bangunan</span></a></li>
-
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
-                                class="icon icon-app-store"></i><span class="nav-text">Manajemen Kamar</span></a>
-                        <ul aria-expanded="false">
-                            <li><a href="{{ route('tipe_kamar.index') }}">Tipe Kamar</a></li>
-                            <li><a href="{{ route('kamar.index') }}">Semua Kamar</a></li>
-                            <li><a href="{{ route('riwayat_kamar.index') }}">Riwayat Kamar</a></li>
-                        </ul>
+                    <li class="nav-label">Kamar</li>
+                    <li><a href="{{ route('kamar.index') }}" aria-expanded="false"><i
+                                class="icon icon-single-copies"></i><span class="nav-text">Semua Kamar</span></a></li>
+                    <li><a href="{{ route('kamar.create') }}" aria-expanded="false"><i
+                                class="icon icon-single-content-03"></i><span class="nav-text">Tambah Kamar
+                                Baru</span></a>
                     </li>
-                    <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
+                    <li><a href="{{ route('tipe_kamar.index') }}" aria-expanded="false"><i
+                                class="icon icon-tag-cut"></i><span class="nav-text">Tipe Kamar</span></a></li>
+                    <li><a href="{{ route('riwayat_kamar.index') }}" aria-expanded="false"><i
+                                class="icon icon-house-search-engine"></i><span class="nav-text">Riwayat
+                                Kamar</span></a></li>
+
+                    {{-- <li><a class="has-arrow" href="javascript:void()" aria-expanded="false"><i
                                 class="icon icon-app-store"></i><span class="nav-text">Penyewa</span></a>
                         <ul aria-expanded="false">
                             <li><a href="{{ route('penyewa.create') }}">Tambah Penyewa Baru</a></li>
-                            <li><a href="{{ route('penyewa.index')  }}">Semua Penyewa</a></li>
+                            <li><a href="{{ route('penyewa.index') }}">Semua Penyewa</a></li>
                         </ul>
+                    </li> --}}
+
+                    <li class="nav-label">Penyewa</li>
+
+                    <li><a href="{{ route('penyewa.index') }}" aria-expanded="false"><i
+                                class="icon icon-users-mm"></i><span class="nav-text">Semua Penyewa</span></a></li>
+                    <li><a href="{{ route('penyewa.create') }}" aria-expanded="false"><i
+                                class="icon icon-single-04"></i><span class="nav-text">Tambah Penyewa Baru</span></a>
                     </li>
+
 
 
                     <li class="nav-label">Pembayaran</li>
 
-                    <li><a href="{{ route('tagihan.belumbayar.index') }}" aria-expanded="false"><i class="icon icon-house-pricing"></i><span class="nav-text">Belum Bayar</span></a></li>
-                    <li><a href="{{ route('tagihan.bayar.create') }}" aria-expanded="false"><i class="ti-money"></i><span class="nav-text">Catat Pembayaran Baru</span></a></li>
-                    <li><a href="{{ route('tagihan.riwayat.index') }}" aria-expanded="false"><i class="ti-bar-chart"></i><span class="nav-text">Riwayat Pembayaran</span></a></li>
+                    <li><a href="{{ route('tagihan.belumbayar.index') }}" aria-expanded="false"><i
+                                class="icon icon-wallet-90"></i><span class="nav-text">Belum Bayar</span></a></li>
+                    <li><a href="{{ route('tagihan.bayar.create') }}" aria-expanded="false"><i
+                                class="icon icon-edit-72"></i><span class="nav-text">Catat Pembayaran Baru</span></a>
+                    </li>
+                    <li><a href="{{ route('tagihan.riwayat.index') }}" aria-expanded="false"><i
+                                class="icon icon-chart-bar-33"></i><span class="nav-text">Riwayat
+                                Pembayaran</span></a></li>
 
                     <li class="nav-label">Data Master</li>
 
-                    <li><a href="{{ route('master.rekening.index') }}" aria-expanded="false"><i class="ti-wallet"></i><span class="nav-text">Rekening</span></a></li>
+                    <li><a href="{{ route('master.rekening.index') }}" aria-expanded="false"><i
+                                class="icon icon-e-reader"></i><span class="nav-text">Rekening</span></a></li>
+
+                    <li><a href="{{ route('profile.index') }}" aria-expanded="false"><i
+                                class="icon icon-single-04-2"></i><span class="nav-text">Profil Saya</span></a></li>
 
                 </ul>
             </div>
@@ -195,9 +219,9 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{asset('admin')}}/vendor/global/global.min.js"></script>
-    <script src="{{asset('admin')}}/js/quixnav-init.js"></script>
-    <script src="{{asset('admin')}}/js/custom.min.js"></script>
+    <script src="{{ asset('admin') }}/vendor/global/global.min.js"></script>
+    <script src="{{ asset('admin') }}/js/quixnav-init.js"></script>
+    <script src="{{ asset('admin') }}/js/custom.min.js"></script>
 
 
     <!-- Datatable -->
@@ -208,16 +232,16 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
-                reader.onload = function (e) {
-                    $('#'+target).attr('src', e.target.result);
-                    $('#'+target).show();
+                reader.onload = function(e) {
+                    $('#' + target).attr('src', e.target.result);
+                    $('#' + target).show();
                 }
 
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        $('.image-upload').change(function(){
+        $('.image-upload').change(function() {
             previewUploadedImage(this, $(this).attr('target-preview'));
         });
     </script>
@@ -225,4 +249,5 @@
     @stack('scripts')
 
 </body>
+
 </html>

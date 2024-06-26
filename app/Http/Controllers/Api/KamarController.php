@@ -164,7 +164,11 @@ class KamarController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: Gabisa dihapus kalau ada orang
+        $riwayat = RiwayatKamar::where('kamar_id', $id)->first();
+        $sewa = Sewa::where('kamar_id', $id)->first();
+        if ($riwayat || $sewa) {
+            return response()->json(['message' => 'Data gagal dihapus, karena kamar sudah pernah disewa'], 400);
+        }
 
         $kamar = Kamar::find($id);
         if (!$kamar) {

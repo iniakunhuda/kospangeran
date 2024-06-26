@@ -206,7 +206,29 @@ class PenyewaController extends Controller
      */
     public function destroy($id)
     {
-        //TODO: Gabisa dihapus
+        $penyewa = Penyewa::find($id);
+        if (!$penyewa) {
+            return abort(404, 'Penyewa tidak ditemukan');
+        }
+
+        // check sewa
+        $sewa = Sewa::where('penyewa_id', $penyewa->id)->first();
+        if ($sewa) {
+            return redirect()->back()->withErrors(['error' => 'Data gagal dihapus, penyewa memiliki riwayat sewa']);
+        }
+
+        $riwayat_bayar = RiwayatKamar::where('penyewa_id', $penyewa->id)->first();
+        if ($riwayat_bayar) {
+            return redirect()->back()->withErrors(['error' => 'Data gagal dihapus, penyewa memiliki riwayat bayar']);
+        }
+
+
+        $result = $penyewa->delete();
+        if ($result) {
+            return $this->getRedirectRoute()->with('success', 'Data berhasil dihapus');
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Data gagal dihapus']);
+        }
     }
 
 
