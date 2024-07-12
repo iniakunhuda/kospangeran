@@ -95,14 +95,15 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'localhost'),
             'port' => env('DB_PORT', 27017),
             'database' => env('DB_DATABASE', 'homestead'),
-            'username' => env('MONGODB_USERNAME', 'homestead'),
-            'password' => env('MONGODB_PASSWORD', 'secret'),
-            'options' => [
-                'appname' => 'homestead',
-            ],
+            'username' => env('DB_USERNAME', 'homestead'),
+            'password' => env('DB_PASSWORD', 'secret'),
+            // 'options' => [
+            //     'authenticationDatabase' => env('AUTHENTICATION_DATABASE', 'admin'),
+            //     'database' => 'admin' // sets the authentication database required by mongo 3
+            // ],
         ],
 
     ],

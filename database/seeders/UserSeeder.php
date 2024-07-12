@@ -18,18 +18,9 @@ class UserSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         \App\Models\User::factory()->create([
-            'name' => 'Sandi Admin',
-            'email' => 'sandi@gmail.com',
-            'password' => bcrypt('sandi123'),
-            'remember_token' => Str::random(10),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
-        \App\Models\User::factory()->create([
-            'name' => 'Ibu Sandi',
-            'email' => 'ibusandi@gmail.com',
-            'password' => bcrypt('sandi123'),
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin123'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),

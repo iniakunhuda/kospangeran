@@ -94,7 +94,7 @@
                             @else
                             <div class="media">
                                 <div class="mr-3">
-                                    <img src="{{ $kamar->penyewa->foto_penyewa_url }}"  class="img-fluid rounded">
+                                    <img style="width:150px;" src="{{ $kamar->penyewa->foto_penyewa_url }}"  class="img-fluid rounded">
                                 </div>
                                 <div class="media-body">
                                     <strong>{{ $kamar->penyewa->nama }}</strong><br>

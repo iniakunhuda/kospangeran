@@ -59,7 +59,7 @@
                             @foreach ($kamar->sewa as $riwayat)
                                 <div class="media">
                                     <div class="mr-3">
-                                        <img src="{{ $riwayat->penyewa->foto_penyewa_url }}"  class="img-fluid rounded">
+                                        <img style="width:150px" src="{{ $riwayat->penyewa->foto_penyewa_url }}"  class="img-fluid rounded">
                                     </div>
                                     <div class="media-body">
                                         <strong>{{ $riwayat->penyewa->nama }}</strong><br>

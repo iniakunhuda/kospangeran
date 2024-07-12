@@ -136,8 +136,10 @@ class KamarController extends Controller
 
             // remove old photos
             $oldPhotos = $kamar->foto;
-            foreach ($oldPhotos as $oldPhoto) {
-                Storage::delete($oldPhoto);
+            if (!is_null($oldPhotos)) {
+                foreach ($oldPhotos as $oldPhoto) {
+                    Storage::delete($oldPhoto);
+                }
             }
 
             foreach ($request->foto as $key => $foto) {
@@ -178,8 +180,10 @@ class KamarController extends Controller
         // remove old photos
         if ((count($kamar->foto) > 0)) {
             $oldPhotos = $kamar->foto;
-            foreach ($oldPhotos as $oldPhoto) {
-                Storage::delete($oldPhoto);
+            if (!is_null($oldPhotos)) {
+                foreach ($oldPhotos as $oldPhoto) {
+                    Storage::delete($oldPhoto);
+                }
             }
         }
 

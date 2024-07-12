@@ -6,9 +6,6 @@ networks:
 services:
     app:
         build:
-            args:
-                USER: rudi
-                UID: 1000
             context: ./
             dockerfile: Dockerfile
         image: kosan_image
@@ -41,11 +38,11 @@ services:
             - ./:/var/www
         environment:
             - DB_CONNECTION=mongodb
-            - DB_HOST=mongodb
+            - DB_HOST=localhost
             - DB_PORT=27018
             - DB_DATABASE=sikosan
-            - DB_USERNAME=${MONGODB_USERNAME}
-            - DB_PASSWORD=${MONGODB_PASSWORD}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
         depends_on:
             - mongodb
         networks:
@@ -57,7 +54,7 @@ services:
             - MONGO_INITDB_ROOT_USERNAME=kosandb
             - MONGO_INITDB_ROOT_PASSWORD=banana123
         ports:
-            - "27018:27017" # TODO: change to 27017 ketika di production
+            - "27018:27017"
         volumes:
             - mongodb-data:/data/db
         networks:
